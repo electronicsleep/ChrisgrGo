@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 GOOS=linux go build chrisgr.go
 docker rm chrisgr
 docker build -t chrisgr .
