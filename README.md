@@ -1,5 +1,5 @@
 # chrisgr-go-bootstrap
 
-Website made with go, bootstrap and docker integration
+Example website with go/bootstrap/docker integration
 
 http://chrisgr.com
