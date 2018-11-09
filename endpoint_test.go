@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -17,12 +18,16 @@ func TestHealthCheckhalder(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("hanlder returned wrong status code: (%v : %v)", status, http.StatusOK)
+		t.Errorf("handler returned wrong status code: (%v : %v)", status, http.StatusOK)
+	} else {
+		fmt.Printf("handler returned correct status code: (%v : %v)\n", status, http.StatusOK)
 	}
 
 	expected := "chrisgr: health ok"
 	if rr.Body.String() != expected {
-		t.Errorf("hanlder returned unexpected body: (%v, %v)", rr.Body.String(), expected)
+		t.Errorf("handler returned unexpected body: (%v, %v)", rr.Body.String(), expected)
+	} else {
+		fmt.Printf("handler returned expected body: (%v, %v)\n", rr.Body.String(), expected)
 	}
 }
 
@@ -37,10 +42,14 @@ func TestTimeHalder(t *testing.T) {
 
 	if status := rr.Code; status != http.StatusOK {
 		t.Errorf("handler returned wrong status code: ( %v : %v )", status, http.StatusOK)
+	} else {
+		fmt.Printf("handler returned correct status code: ( %v : %v )\n", status, http.StatusOK)
 	}
 
 	expected := "time:"
 	if !strings.Contains(rr.Body.String(), expected) {
-		t.Errorf("hanlder returned unexpected body: ( %v, %v )", rr.Body.String(), expected)
+		t.Errorf("handler returned unexpected body: ( %v, %v )", rr.Body.String(), expected)
+	} else {
+		fmt.Printf("handler contained expected body: ( %v, %v )\n", rr.Body.String(), expected)
 	}
 }
