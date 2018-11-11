@@ -50,6 +50,6 @@ func TestTimeHalder(t *testing.T) {
 	if !strings.Contains(rr.Body.String(), expected) {
 		t.Errorf("handler returned unexpected body: ( %v, %v )", rr.Body.String(), expected)
 	} else {
-		fmt.Printf("handler contained expected body: ( %v, %v )\n", rr.Body.String(), expected)
+		fmt.Printf("handler contained expected string: ( %v, %v )\n", rr.Body.String(), expected)
 	}
 }
