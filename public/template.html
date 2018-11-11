@@ -46,10 +46,7 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
-            <li><a href="/linux">Linux</a></li>
-            <li><a href="/apple">Apple</a></li>
-            <li><a href="/projects">Projects</a></li>
+            {{.Links}}
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -59,12 +56,8 @@
 
       <div class="template">
 
-        <h1>Template</h1>
+        {{.Body}}
 
-        <p class="lead">Name: {{.Name}}
-        <p>Email: {{.Email}}
-        <p>Subject: {{.Subject}}
-        <p>Message: {{.Message}}
       </div>
 
     </div><!-- /.container -->

@@ -21,31 +21,38 @@ func timeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("time: " + tm))
 }
 
-func contactformHandler(w http.ResponseWriter, r *http.Request) {
+func templatePageHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("public/template.html"))
 
 	type TmplPageData struct {
-		Name    string
-		Email   string
-		Subject string
-		Message string
+		Links template.HTML
+		Body  template.HTML
 	}
 
-	log.Println("Contact form endpoint")
+	log.Println("static page template", r.URL.Path)
 	err := r.ParseForm()
 	if err != nil {
 		panic(err)
 	}
-	name := r.Form.Get("name")
-	email := r.Form.Get("email")
-	subject := r.Form.Get("subject")
-	message := r.Form.Get("message")
+	file := r.URL.Path
+	bodyString, rferr := ioutil.ReadFile("public" + file + ".html")
+
+	if rferr != nil {
+		panic(rferr)
+	}
+
+	headerLinksString, rferr2 := ioutil.ReadFile("public/header_links.html")
+
+	if rferr2 != nil {
+		panic(rferr2)
+	}
+
+	headerLinks := template.HTML(string(headerLinksString))
+	body := template.HTML(string(bodyString))
 
 	data := TmplPageData{
-		Name:    name,
-		Email:   email,
-		Subject: subject,
-		Message: message,
+		Links: headerLinks,
+		Body:  body,
 	}
 
 	tmpl_err := tmpl.Execute(w, data)
@@ -75,22 +82,25 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.Dir("./public/")))
 
-	about := http.HandlerFunc(staticHandler)
+	about := http.HandlerFunc(templatePageHandler)
 	http.HandleFunc("/about", about)
 
-	linux := http.HandlerFunc(staticHandler)
+	linux := http.HandlerFunc(templatePageHandler)
 	http.HandleFunc("/linux", linux)
 
-	apple := http.HandlerFunc(staticHandler)
+	apple := http.HandlerFunc(templatePageHandler)
 	http.HandleFunc("/apple", apple)
 
-	projects := http.HandlerFunc(staticHandler)
+	projects := http.HandlerFunc(templatePageHandler)
 	http.HandleFunc("/projects", projects)
 
-	contact := http.HandlerFunc(staticHandler)
-	http.HandleFunc("/contact", contact)
+	experiments := http.HandlerFunc(templatePageHandler)
+	http.HandleFunc("/experiments", experiments)
 
-	send_contact := http.HandlerFunc(contactformHandler)
+	page := http.HandlerFunc(templatePageHandler)
+	http.HandleFunc("/template", page)
+
+	send_contact := http.HandlerFunc(contactFormHandler)
 	http.HandleFunc("/send_contact", send_contact)
 
 	fmt.Println("Server: http://localhost:8080")
