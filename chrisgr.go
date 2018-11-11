@@ -100,9 +100,6 @@ func main() {
 	page := http.HandlerFunc(templatePageHandler)
 	http.HandleFunc("/template", page)
 
-	send_contact := http.HandlerFunc(contactFormHandler)
-	http.HandleFunc("/send_contact", send_contact)
-
 	fmt.Println("Server: http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
