@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestHealthCheckhalder(t *testing.T) {
+func TestHealthCheckHandler(t *testing.T) {
 	req, err := http.NewRequest("GET", "/health", nil)
 	if err != nil {
 		t.Fatal(err)
@@ -31,7 +31,7 @@ func TestHealthCheckhalder(t *testing.T) {
 	}
 }
 
-func TestTimeHalder(t *testing.T) {
+func TestTimeHandler(t *testing.T) {
 	req, err := http.NewRequest("GET", "/time", nil)
 	if err != nil {
 		t.Fatal(err)
