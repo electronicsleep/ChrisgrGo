@@ -41,6 +41,11 @@ func templatePageHandler(w http.ResponseWriter, r *http.Request) {
 	handleError("read template file", err)
 
 	file := r.URL.Path
+
+	if file == "/" {
+		file = "/index"
+	}
+
 	bodyString, rferr := ioutil.ReadFile("public" + file + ".html")
 	handleError("read page file", rferr)
 
@@ -102,13 +107,17 @@ func main() {
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/public/", http.StripPrefix("/public/", fs))
 
-	root := http.HandlerFunc(healthHandler)
-	http.HandleFunc("/health", root)
+	health := http.HandlerFunc(healthHandler)
+	http.HandleFunc("/health", health)
 
 	th := http.HandlerFunc(timeHandler)
 	http.HandleFunc("/time", th)
 
-	http.Handle("/", http.FileServer(http.Dir("./public/")))
+	root := http.HandlerFunc(templatePageHandler)
+	http.HandleFunc("/", root)
+
+	index := http.HandlerFunc(templatePageHandler)
+	http.HandleFunc("/index", index)
 
 	about := http.HandlerFunc(templatePageHandler)
 	http.HandleFunc("/about", about)
