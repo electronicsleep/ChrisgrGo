@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -46,22 +47,27 @@ func templatePageHandler(w http.ResponseWriter, r *http.Request) {
 		file = "/index"
 	}
 
-	bodyString, rferr := ioutil.ReadFile("public" + file + ".html")
-	handleError("read page file", rferr)
+	if _, err := os.Stat("public" + file + ".html"); !os.IsNotExist(err) {
 
-	headerLinksString, rferr2 := ioutil.ReadFile("public/header_links.html")
-	handleError("read header file", rferr2)
+		bodyString, rferr := ioutil.ReadFile("public" + file + ".html")
+		handleError("read page file", rferr)
 
-	headerLinks := template.HTML(string(headerLinksString))
-	body := template.HTML(string(bodyString))
+		headerLinksString, rferr2 := ioutil.ReadFile("public/header_links.html")
+		handleError("read header file", rferr2)
 
-	data := TmplPageData{
-		Links: headerLinks,
-		Body:  body,
+		headerLinks := template.HTML(string(headerLinksString))
+		body := template.HTML(string(bodyString))
+
+		data := TmplPageData{
+			Links: headerLinks,
+			Body:  body,
+		}
+
+		tmpl_err := tmpl.Execute(w, data)
+		handleError("template execute error:", tmpl_err)
+	} else {
+		fmt.Fprintf(w, "404")
 	}
-
-	tmpl_err := tmpl.Execute(w, data)
-	handleError("template execute error:", tmpl_err)
 }
 
 func contactFormHandler(w http.ResponseWriter, r *http.Request) {
