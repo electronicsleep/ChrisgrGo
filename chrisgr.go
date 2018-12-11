@@ -73,7 +73,12 @@ func templatePageHandler(w http.ResponseWriter, r *http.Request) {
 func contactFormHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("public/send_contact.html"))
 
+	headerLinksString, rferr2 := ioutil.ReadFile("public/header_links.html")
+	handleError("read header file", rferr2)
+	headerLinks := template.HTML(string(headerLinksString))
+
 	type TmplPageData struct {
+		Links   template.HTML
 		Name    string
 		Email   string
 		Subject string
@@ -90,6 +95,7 @@ func contactFormHandler(w http.ResponseWriter, r *http.Request) {
 	message := r.Form.Get("message")
 
 	data := TmplPageData{
+		Links:   headerLinks,
 		Name:    name,
 		Email:   email,
 		Subject: subject,
@@ -143,7 +149,7 @@ func main() {
 	page := http.HandlerFunc(templatePageHandler)
 	http.HandleFunc("/template", page)
 
-	contact := http.HandlerFunc(staticHandler)
+	contact := http.HandlerFunc(templatePageHandler)
 	http.HandleFunc("/contact", contact)
 
 	send_contact := http.HandlerFunc(contactFormHandler)
