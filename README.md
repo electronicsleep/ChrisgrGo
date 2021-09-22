@@ -1,5 +1,5 @@
-# chrisgr-go-bootstrap
+# ChrisgrGo
 
-Example website with go/bootstrap/docker integration
+Example website using Go/Docker/Bootstrap.js
 
-http://chrisgr.com
+https://www.chrisgr.com/
