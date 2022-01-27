@@ -3,9 +3,9 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                echo 'Build Project:'
-                sh 'ls -l'
+                echo 'Step: Build'
                 sh 'bash build-linux.sh'
+                sh 'ls -ltra'
             }
         }
     }
